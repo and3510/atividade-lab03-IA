@@ -26,3 +26,28 @@ def create_causal_mask(seq_len):
     mask[indices_superior] = -np.inf
     
     return mask
+
+def prova_real_tarefa_1():
+    print("--- TAREFA 1: Máscara Causal ---")
+    seq_len = 5
+    d_k = 64
+    
+    # Matrizes fictícias Q e K 
+    Q = np.random.randn(seq_len, d_k)
+    K = np.random.randn(seq_len, d_k)
+    
+    # Cálculo: (Q @ K.T) / sqrt(d_k) 
+    scores = (Q @ K.T) / np.sqrt(d_k)
+    
+    # Adicionando a máscara M 
+    M = create_causal_mask(seq_len)
+    scores_com_mascara = scores + M
+    
+    # Aplicação do Softmax [cite: 19]
+    pesos_atencao = softmax(scores_com_mascara)
+    
+    print("Máscara Causal M:\n", M)
+    print("\nProbabilidades (Softmax):")
+    print(np.round(pesos_atencao, 4)) # Prova real: valores futuros devem ser 0.0 [cite: 19]
+    print("-" * 30)
+
