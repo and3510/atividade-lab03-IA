@@ -135,3 +135,11 @@ def loop_inferencia():
 if __name__ == "__main__":
     prova_real_tarefa_1()
     
+    # Simulação da Tarefa 2 (Cross-Attention)
+    enc_out = np.random.randn(1, 10, 512) # [batch, seq_len_fr, d_model] [cite: 30]
+    dec_st = np.random.randn(1, 4, 512)   # [batch, seq_len_en, d_model] [cite: 31]
+    saida_cross = cross_attention(enc_out, dec_st)
+    print(f"Tarefa 2 - Dimensão da Saída Cross-Attention: {saida_cross.shape}")
+    print("-" * 30)
+    
+    loop_inferencia()
