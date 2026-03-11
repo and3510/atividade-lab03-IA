@@ -51,3 +51,33 @@ def prova_real_tarefa_1():
     print(np.round(pesos_atencao, 4)) # Prova real: valores futuros devem ser 0.0 [cite: 19]
     print("-" * 30)
 
+# ==========================================================
+# Tarefa 2: A Ponte Encoder-Decoder (Cross-Attention)
+# ==========================================================
+
+def cross_attention(encoder_out, decoder_state):
+    """
+    Calcula a atenção cruzada entre o estado do Decoder e a saída do Encoder[cite: 32].
+    """
+    d_model = 512
+    
+    # Matrizes de pesos arbitrárias para as projeções [cite: 33, 34]
+    W_q = np.random.randn(d_model, d_model)
+    W_k = np.random.randn(d_model, d_model)
+    W_v = np.random.randn(d_model, d_model)
+    
+    # Projeta para virar Query (do Decoder), Keys e Values (do Encoder) [cite: 33, 34]
+    Q = decoder_state @ W_q
+    K = encoder_out @ W_k
+    V = encoder_out @ W_v
+    
+    # Equação do Scaled Dot-Product Attention: softmax(QK^T / sqrt(d_k))V [cite: 14, 35]
+    # Usando d_k = d_model aqui
+    d_k = Q.shape[-1]
+    # K.swapaxes(-1, -2) equivale ao K.T para matrizes de múltiplas dimensões (batch)
+    scores = (Q @ K.swapaxes(-1, -2)) / np.sqrt(d_k)
+    
+    atencao = softmax(scores)
+    
+    return atencao @ V
+
