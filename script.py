@@ -81,3 +81,54 @@ def cross_attention(encoder_out, decoder_state):
     
     return atencao @ V
 
+# ==========================================================
+# Tarefa 3: Simulando o Loop de Inferência Auto-Regressivo
+# ==========================================================
+
+# Configurações do Mock [cite: 40, 41]
+VOCAB_SIZE = 10000
+START_TOKEN = "<START>"
+EOS_TOKEN = "<EOS>"
+
+def generate_next_token(current_sequence, encoder_out):
+    """Simula a geração de um vetor de probabilidades do tamanho do vocabulário[cite: 40, 41]."""
+    # Simulando a saída do Decoder com um vetor aleatório
+    logits = np.random.randn(VOCAB_SIZE)
+    
+    # Força a parada após um certo tamanho para fins de demonstração
+    if len(current_sequence) > 6:
+        probs = np.zeros(VOCAB_SIZE)
+        probs[999] = 1.0 # Vamos fingir que o ID 999 é o <EOS>
+        return probs
+        
+    return softmax(logits)
+
+def loop_inferencia():
+    print("--- TAREFA 3: Loop Auto-Regressivo ---")
+    
+    # Dados fictícios iniciais [cite: 30, 31, 40]
+    encoder_output = np.random.randn(1, 10, 512)
+    lista_contexto = [START_TOKEN]
+    
+    # Mapeamento fictício para o token de parada
+    id_para_token = {999: EOS_TOKEN}
+    
+    # O Loop de inferência [cite: 42]
+    while True:
+        # Chama a função iterativamente [cite: 42]
+        probabilidades = generate_next_token(lista_contexto, encoder_output)
+        
+        # Seleciona a palavra com maior probabilidade (argmax) [cite: 43]
+        proximo_id = np.argmax(probabilidades)
+        proxima_palavra = id_para_token.get(proximo_id, f"token_{proximo_id}")
+        
+        # Adiciona a nova palavra na lista [cite: 44]
+        lista_contexto.append(proxima_palavra)
+        print(f"Token adicionado: {proxima_palavra}")
+        
+        # Interrupção imediata se for <EOS> [cite: 45]
+        if proxima_palavra == EOS_TOKEN:
+            break
+            
+    print("\nFrase Final Gerada:", " ".join(lista_contexto))
+
