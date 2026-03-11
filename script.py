@@ -132,3 +132,6 @@ def loop_inferencia():
             
     print("\nFrase Final Gerada:", " ".join(lista_contexto))
 
+if __name__ == "__main__":
+    prova_real_tarefa_1()
+    
